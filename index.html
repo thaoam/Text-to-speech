@@ -1,0 +1,381 @@
+<!--功能:4hrs/外觀:1hr-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://freight.cargo.site/t/original/i/39e472dc7f8e34fef5f460eaa20f318cf19e2e7b9267f992e67a25e2a2f2427b/jurokugiku_trans.ico" rel="shortcut icon">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+    <title>Text to Speech</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+</head>
+<style>
+
+body {
+  padding: 0px;
+  margin: 0px;
+  background-color: #f0edff;
+}
+
+form {
+  padding-left: 50px;
+  border: 3px solid #614ad3;
+  margin-bottom: 10px;
+  background-color: #fff;
+}
+
+header.jumbotron {
+  background-color: #614ad3;
+  background-size: cover;
+  background-position: center center;
+  padding: 30px;
+  margin-top: 20px;
+  border-radius: 0;
+  color: #fff;
+  text-align: center;
+  border: 3px solid #614ad3;
+}
+
+span {
+  font-size: 12px;
+  color: #888;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+span.maker {
+  color: #2d248a;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 30px;
+}
+
+.container {
+  width: 600px;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 30px;
+  margin-top: 30px;
+  color: #2d248a;
+}
+
+.keyBox, .fileName {
+  color: #999;
+  padding: 5px;
+  padding-left: 10px;
+  width: 300px;
+}
+
+.region {
+  padding: 5px;
+  margin-left: 5px;
+  display: inline;
+  width: 130px;
+  color: #999;
+  padding-left: 8px;
+}
+
+select {
+  width: 300px;
+  padding: 7px;
+  border-radius: 7px;
+}
+
+textarea {
+  color: #999;
+  padding: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: block;
+  border-radius: 7px;
+}
+
+input {
+  border-radius: 7px;
+  border: 1px solid #000;
+  padding: 7px;
+}
+
+.fileName {
+  width: 450px;
+}
+
+button {
+  display: inline-block;
+  margin: 20px 15px 15px 0px;
+  padding: 7px 20px 7px 20px;
+  margin-bottom: 50px;
+  font-weight: bold;
+  background-color: #e42c64;
+  color: #FFF;
+  border-radius: 7px;
+  border: none;
+  font-size: 13px;
+}
+
+i {
+  color: #614ad3;
+}
+
+.fa-python {
+  color: #FFF;
+}
+.fa-download {
+  color: #FFF;
+}
+
+.button-area{
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 50px;
+}
+    
+</style>
+
+
+
+<body>
+    
+  <div class="container"> 
+    <header class="jumbotron">
+     <h1>Tiếp Text to Speech</h1>
+   </header>
+   <form name="easyForm">
+       <h2><i class="fas fa-key"></i><span>※This is acess provider by tiep.vn.<br>Free to use. Update weekly. contact <a href="mailto:tiep@tiep.vn">tiep@tiep.vn</a> if you want to improve this.</span></h2>
+       <input type="hidden" class="keyBox" id="keyBox" type="text" placeholder="key-here" value="f33e1e503eab47dfa5253ec62c5c1196" required>
+       <input type="hidden" class="region" id="region" type="text" placeholder="region-here" value="eastus" required>
+   
+       <h2>2. Select language <i class="fas fa-language"></i><span>Currently only 5 options are built</span></h2>
+       <!--給定這id，等等需要用他填入學院資料,onchange內動到這element會呼叫裡面的方法
+       this.selectedIndex是選到第幾項的值(0開始)傳入當參數-->
+       <select id="language-list" onchange="changeLanguage(this.selectedIndex)"></select>
+ 
+       <h2>3. Choose a role <i class="fas fa-user-friends"></i><span>Optional roles are affected by language</span></h2>
+       <select id="role-list"></select><!--給定這id，等等需要用他填入對應的角色資料-->
+ 
+       <h2>4. Select the text type <i class="fas fa-code"></i><span>Please choose SSML if you have to adjust the speech rate</span></h2>
+       <select id="textType" placeholder="A simple test to write to a file." required>
+         <option value="synthesizer.speak_text_async(scenario)">Plain text</option>
+         <option value="synthesizer.speak_ssml_async(scenario)">SSML</option>
+       </select>
+ 
+       <h2>5. Enter text <i class="fas fa-file-alt"></i><span>Punctuation must be included, please remove unnecessary whitespace</span></h2>
+       <textarea id="text4speech" rows="4" cols="50" required></textarea>
+ 
+       <h2>6. File name <i class="fas fa-keyboard"></i><span>※This is a required item</span></h2>
+       <input class="fileName" id="fileName" type="text" required>
+      <div class="button-area">
+        <button id="downloadButtonMp3"><i class="fas fa-download"></i>&nbsp;MP3 Audio</button>
+        <button id="downloadButton"><i class="fas fa-download"></i>&nbsp;Python Code</button>
+       
+      </div>
+   </form>
+  </div> 
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk@latest/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
+<script>
+  var SpeechSDK;
+  if (!!window.SpeechSDK) {
+    SpeechSDK = window.SpeechSDK;
+  }
+  //語言的陣列
+  const languages=[{name:'English (US)',code:'en-US'},{name:'Tiếng Việt (VN)',code:'vi-VN'},{name:'Mandarin (Taiwan)',code:'zh-Tw'},{name:'Japanese (Japan)',code:'ja-JP'},{name:'Korean (South Korea)',code:'ko-KR'}];
+
+    //document就是這html文件。
+    //getElementById是裡面的方法，參數給"language-list"抓到這id標籤列
+    var languageSelect=document.getElementById("language-list");
+    //製造一個字串，以html的語法填入院的陣列
+    var inner="";
+    for(var i=0;i<languages.length;i++){
+        
+        //inner第一行就會像是 <option value=zh-TW>國語(台灣)</option>
+        inner=inner+'<option value='+languages[i].code+'>'+languages[i].name+'</option>';
+    }
+    //innerHTML 賦值inner給這element屬性
+    languageSelect.innerHTML=inner;
+    /*
+    其實就是用程式碼的方式把XML文件修改成這樣
+    <select id="language-list">
+        <option value="zh-Tw">國語(台灣)</option>
+        <option value="en-US">英語(美國)</option>
+        ....		
+    </select>
+    */
+
+    //這裡放角色的陣列(有順序性，對應各語系的資料)
+    const roles=new Array();
+    roles[0]=[{name:'Sara (Female)',code:'en-US-SaraNeural'},{name:'Amber (Female)',code:'en-US-AmberNeural'},{name:'Aria(女)',code:'en-US-AriaNeural'},{name:'Jenny(女)',code:'en-US-JennyNeural'},{name:'Guy(男)',code:'en-US-GuyNeural'},{name:'Brandon(男)',code:'en-US-BrandonNeural'}];
+    roles[1]=[{name:'Hoài My (Nữ)',code:'vi-VN-HoaiMyNeural'},{name:'Nam Minh (Nam)',code:'vi-VN-NamMinhNeural'}];
+    roles[2]=[{name:'曉臻(女)',code:'zh-TW-HsiaoChenNeural'},{name:'曉雨(女)',code:'zh-TW-HsiaoYuNeural'},{name:'雲哲(男)',code:'zh-TW-YunJheNeural'}];
+    roles[3]=[{name:'奈奈美(女)',code:'ja-JP-NanamiNeural'},{name:'啟太(男)',code:'ja-JP-KeitaNeural'}];
+    roles[4]=[{name:'선희(女)',code:'ko-KR-SunHiNeural'},{name:'인준(男)',code:'ko-KR-InJoonNeural'}];
+
+    //動到"language-list"這select元素後呼叫此方法
+    function changeLanguage(index){
+        //跟剛剛一樣，製造一個字串，以html的語法填入系所的陣列
+        var Sinner="";
+        for(var i=0;i<roles[index].length;i++){
+            Sinner=Sinner+'<option value='+roles[index][i].code+'>'+roles[index][i].name+'</option>';
+        }
+        //抓到"role-list"這select元素，修改其值
+        var roleSelect=document.getElementById("role-list");
+        roleSelect.innerHTML=Sinner;
+    }
+    //這裡呼叫一次"changeLanguage"這方法，讓瀏覽器在讀完XML後可以直接讓角色的資料出來
+    changeLanguage(document.getElementById("language-list").selectedIndex);
+
+
+// download python code
+//----------------------------------------------------------------------------------------------
+
+window.addEventListener('load', () => {
+  const downloadButton = document.getElementById('downloadButton');
+  downloadButton.addEventListener('click', downloadButton_clicked);
+  const downloadButtonMp3 = document.getElementById('downloadButtonMp3')
+  downloadButtonMp3.addEventListener('click', downloadButtonMp3_clicked)
+});
+
+function downloadButton_clicked(evt) {
+  evt.preventDefault();
+  
+    // generate python script 
+    //------------------------------------------------------------------------------------------
+
+        var theKey=document.getElementById("keyBox").value;
+        var theLanguage=document.getElementById("language-list").value;
+        var theRole=document.getElementById("role-list").value;
+        var theTextType=document.getElementById("textType").value;
+        var theText=document.getElementById("text4speech").value;
+        var fileName=document.getElementById("fileName").value;
+        var toPython='from azure.cognitiveservices.speech import AudioDataStream, SpeechConfig, SpeechSynthesizer, SpeechSynthesisOutputFormat\nfrom azure.cognitiveservices.speech.audio import AudioOutputConfig\nimport datetime\nspeech_config = SpeechConfig(subscription="'+ theKey +'", region="southcentralus")\nspeech_config.speech_synthesis_language = "'+ theLanguage +'"\nspeech_config.speech_synthesis_voice_name ="'+ theRole +'"\nfname ="'+ fileName +'"+datetime.datetime.today().strftime("%Y%m%d%H%M%S") + ".mp3"\naudio_config = AudioOutputConfig(filename=fname)\nscenario = """'+theText+'""";\nsynthesizer = SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)\n'+theTextType;
+
+    //----------------------------------------------------------------------------------------------
+  
+//MIME種類
+//https://developer.mozilla.org/zh-TW/docs/Web/HTTP/Basics_of_HTTP/MIME_types
+//python檔 MIME寫法
+//https://stackoverflow.com/questions/45614485/what-is-the-mime-type-for-py-files 
+  
+  const blob = new Blob([toPython], {type: 'text/x-python'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  document.body.appendChild(a);
+  if (fileName===""){
+    fileName = "Result_From_Cognitive_Services";
+  }
+//副檔名也要改成.py才可以順利以python檔下載
+  a.download = fileName+'.py';
+  a.href = url;
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+
+// download MP3 file
+//----------------------------------------------------------------------------------------------
+function downloadButtonMp3_clicked(evt) {
+  evt.preventDefault();
+  
+  var theKey = document.getElementById("keyBox").value;
+  var theRegion = document.getElementById("region").value;
+  var theLanguage = document.getElementById("language-list").value;
+  var theRole = document.getElementById("role-list").value;
+  var theTextType = document.getElementById("textType").value;
+  var theText = document.getElementById("text4speech").value;
+  var fileName=document.getElementById("fileName").value;
+
+  const speechConfig = SpeechSDK.SpeechConfig.fromSubscription(theKey, theRegion);
+  speechConfig.speechSynthesisLanguage= String(theLanguage);
+  speechConfig.speechSynthesisVoiceName = String(theRole);
+    
+    
+    // Set the output format -- https://docs.microsoft.com/zh-tw/azure/cognitive-services/speech-service/get-started-text-to-speech?tabs=script%2Cwindowsinstall&pivots=programming-language-javascript#customize-audio-format
+  speechConfig.speechSynthesisOutputFormat = SpeechSDK.SpeechSynthesisOutputFormat.Audio48Khz192KBitRateMonoMp3;
+  
+
+  const synthesizer = new SpeechSDK.SpeechSynthesizer(speechConfig, undefined);
+  if(String(theTextType) != "synthesizer.speak_ssml_async(scenario)")
+  {
+    console.log("[INFO] In Text Mode");
+    synthesizer.speakTextAsync(
+        theText,
+        result => {
+            const audioData = result.audioData;
+            console.log(`Audio data byte size: ${audioData.byteLength}.`)
+            synthesizer.close();
+            
+            //JSON.stringify() ：物件變 JSON
+            console.log(JSON.stringify(result));
+            
+            //return result.audioData;
+            const blob = new Blob([result.audioData], {'type': 'audio/mp3'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            var fileName = document.getElementById("fileName").value;
+            document.body.appendChild(a);
+            if (fileName==="")
+            {
+              fileName = "Result_From_Cognitive_Services";
+            }
+            a.download = fileName+'.mp3';
+            a.href = url;
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        },
+        error => {
+          console.log("FAILED")
+            console.log(error);
+            synthesizer.close();
+        });
+  }
+  else
+  //使用SSML自訂語音特性 -- https://docs.microsoft.com/zh-tw/azure/cognitive-services/speech-service/get-started-text-to-speech?tabs=script%2Cwindowsinstall&pivots=programming-language-javascript#use-ssml-to-customize-speech-characteristics
+  {
+    console.log("[INFO] In SSML Mode");
+    synthesizer.speakSsmlAsync(
+      String(theText),
+        result => {
+            if (result.errorDetails) {
+                console.error(result.errorDetails);
+            } else {
+                console.log(JSON.stringify(result));
+
+                  //return result.audioData;
+                  const blob = new Blob([result.audioData], {'type': 'audio/mp3'});
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  var fileName = document.getElementById("fileName").value;
+                  document.body.appendChild(a);
+                  if (fileName==="")
+                  {
+                    fileName = "Result_From_Cognitive_Services";
+                  }
+                  a.download = fileName+'.mp3';
+                  a.href = url;
+                  a.click();
+                  a.remove();
+                  URL.revokeObjectURL(url);
+            }
+            synthesizer.close();
+        },
+        error => {
+            console.log(error);
+            synthesizer.close();
+        });
+  }
+}
+  
+</script>
+
+</html>
